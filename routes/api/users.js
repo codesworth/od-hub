@@ -7,6 +7,12 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
+
+//Load User Input Validation
+
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
+
 //Load UserModel
 const User = require('../../models/User');
 
@@ -25,10 +31,19 @@ router.get('/test', (req,res) => res.json({message:"User Works"}));
 //@acess   Public
 
 router.post('/register',(request,response) => {
+
+    const {errors, isValid} = validateRegisterInput(request.body);
+
+    //Check validation
+    if (!isValid){
+        return response.status(400).json(errors);
+    }
+
     const {email,name,password} = request.body;
     User.findOne({email:email}).then(user =>{
         if (user){
-            return response.status(400).json({email:'Email Already Exists'});
+            errors.email = 'Email Already Exists'
+            return response.status(400).json(errors);
         }else{
             const avatar = gravatar.url(email,{
                 s: '200', //size
@@ -62,13 +77,20 @@ router.post('/register',(request,response) => {
 //@acess   Public
 
 router.post('/login', (request,response) => {
+    
+    const {errors, isValid} = validateLoginInput(request.body);
+
+    if (!isValid){
+        return response.status(400).json(errors);
+    }
     const {email, password} = request.body;
 
     //FInd user
 
     User.findOne({email}).then(user => {
         if (!user){
-            return response.status(404).json({email:"User Not Found"})
+            errors.email = "User Not Found"
+            return response.status(404).json(errors);
         }
         //Checsk Password
         bcrypt.compare(password,user.password).then(isMatch => {
@@ -90,7 +112,8 @@ router.post('/login', (request,response) => {
                         })
                 });
             }else{
-                return response.status(400).json({password:'Password Incorrect'});
+                errors.password = 'Password Incorrect'
+                return response.status(400).json(errors);
             }
         })
     })
