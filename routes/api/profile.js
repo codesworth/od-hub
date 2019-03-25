@@ -7,13 +7,14 @@ const passport = require('passport');
 
 const validateProfileInput = require('../../validation/profile')
 const validateExperienceInput = require('../../validation/experience')
+const validateEducationInput = require('../../validation/education');
 
 //Load Profile model
 const Profile = require('../../models/Profile');
 
 //LoaD USER 
 
-const user = require('../../models/User');
+const User = require('../../models/User');
 
 //@route   GET api/profile/test
 //@desc    Tests Profile routes
@@ -212,5 +213,113 @@ router.post('/experience',passport.authenticate('jwt',{session:false}), (request
     }).catch(err => response.json({Error:"Error occurred" + err}));
 });
 
+//@route   POSt api/profile/experience
+//@desc    Add an Experience
+//@acess   Private
+
+router.post('/education',passport.authenticate('jwt',{session:false}), (request,response) =>{
+
+    const {errors,isValid} = validateEducationInput(request.body);
+
+    if (!isValid){
+        
+        //Return any errors with status 400
+        return response.status(400).json({error:"Unrecoverable",errors});
+    }
+    Profile.findOne({user:request.user.id})
+    .then( profile => {
+        if (!profile){
+            response.json({Error:"No Profile"})
+        }
+        const newEdu = {
+            school: request.body.school,
+            degree:request.body.degree,
+            fieldofstudy:request.body.fieldofstudy,
+            from: request.body.from,
+            to: request.body.to,
+            current: request.body.current,
+            description:request.body.description
+        }
+
+        //Add to experiemce Array
+        profile.education.push(newEdu);
+
+        profile.save()
+        .then(newprofile => {
+            response.json(newprofile);
+        }).catch(err => response.json(err))
+    }).catch(err => response.json({Error:"Error occurred" + err}));
+});
+
+
+
+//@route   DELETE api/profile/experience/:exp_id
+//@desc    Delete an Experience
+//@acess   Private
+
+router.delete('/experience/:exp_id',passport.authenticate('jwt',{session:false}), (request,response) =>{
+
+    
+    Profile.findOne({user:request.user.id})
+    .then( profile => {
+        if (!profile){
+            response.json({Error:"No Profile"})
+        }
+        //Get Remove Index
+        const removeIndex = profile.experience
+        .map( item => item.id)
+        .indexOf(request.params.exp_id)
+
+        //Splice out of Array
+        profile.experience.splice(removeIndex,1);
+
+        //Svae
+        profile.save().then(profile => {
+            response.json(profile);
+        })
+    }).catch(err => response.json({Error:"Error occurred" + err}));
+});
+
+
+//@route   DELETE api/profile/education/:edu_id
+//@desc    Delete an An education
+//@acess   Private
+
+router.delete('/education/:edu_id',passport.authenticate('jwt',{session:false}), (request,response) =>{
+
+    
+    Profile.findOne({user:request.user.id})
+    .then( profile => {
+        if (!profile){
+            response.json({Error:"No Profile"})
+        }
+        //Get Remove Index
+        const removeIndex = profile.education
+        .map( item => item.id)
+        .indexOf(request.params.edu_id)
+
+        //Splice out of Array
+        profile.education.splice(removeIndex,1);
+
+        //Svae
+        profile.save().then(profile => {
+            response.json(profile);
+        })
+    }).catch(err => response.json({Error:"Error occurred" + err}));
+});
+
+
+//@route   DELETE api/profile/
+//@desc    Delete an A User and Profile
+//@acess   Private
+
+
+router.delete('/',passport.authenticate('jwt',{session:false}), (request,response) =>{
+
+    Profile.findOneAndRemove({user:request.user.id})
+    .then(profile => {
+        User.findOneAndRemove({ _id: request.user.id}).then( () => response.json({sucess:true}));
+    })
+});
 
 module.exports = router;
