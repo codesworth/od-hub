@@ -36,11 +36,11 @@ router.get('/', passport.authenticate('jwt', {
         user: request.user.id
     }).then(profile => {
         if (!profile) {
-            errors.noprofile = "There is np profile for this user"
+            errors.noprofile = "There is no profile for this user"
             response.status(404).send(errors)
         }
 
-        response.send(200).send(profile);
+        response.status(200).json(profile);
     }).catch(x => {
         response.status(x);
     })
@@ -89,7 +89,7 @@ router.post('/', passport.authenticate('jwt', {
     }).then(profile => {
         if (profile) {
             //Update
-            Profile.findByIdAndUpdate({
+            Profile.findOneAndUpdate({
                 user: request.user.id
             }, {
                 $set: profileFields
@@ -103,7 +103,7 @@ router.post('/', passport.authenticate('jwt', {
             //Check if handle exists
             Profile.findOne({
                 handle: profileFields.handle
-            }).then(profile => {
+            }).populate('user',['name','avatar']).then(profile => {
                 if (profile) {
                     errors.handle = "Handle Already exists"
                     response.status(400).json(errors)
