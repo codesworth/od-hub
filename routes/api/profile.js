@@ -47,8 +47,47 @@ router.get('/', passport.authenticate('jwt', {
 });
 
 
-//@route   POST api/profile
-//@desc    Create / Update  user ID
+
+
+
+//@route   POST api/profile/handle/:handle
+//@desc    Get Profile By handle
+//@acess   Public
+
+router.get('/handle/:handle', (request,response) => {
+
+    const errors = {};
+    Profile.findOne({handle:request.params.handle}).populate('user',[name,avatar])
+    .then(profile => {
+        if (!profile){
+            errors.profile = "There is no profile for this user";
+            response.status(400).json(errors);
+        }
+        response.json(profile);
+    }).catch(err => response.status(404).json(err));
+});
+
+
+//@route   POST api/profile/user/:user_id
+//@desc    Get Profile By UserID
+//@acess   Public
+
+router.get('/user/:user_id', (request,response) => {
+
+    const errors = {};
+    Profile.findOne({handle:request.params.user_id}).populate('user',[name,avatar])
+    .then(profile => {
+        if (!profile){
+            errors.profile = "There is no profile for this user";
+            response.status(400).json(errors);
+        }
+        response.json(profile);
+    }).catch(err => response.status(404).json(err));
+});
+
+
+//@route   GET api/profile
+//@desc    Get current user ID
 //@acess   Private
 
 router.post('/', passport.authenticate('jwt', {
