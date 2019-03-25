@@ -6,6 +6,7 @@ const passport = require('passport');
 //Load validation
 
 const validateProfileInput = require('../../validation/profile')
+const validateExperienceInput = require('../../validation/experience')
 
 //Load Profile model
 const Profile = require('../../models/Profile');
@@ -37,7 +38,7 @@ router.get('/', passport.authenticate('jwt', {
     }).then(profile => {
         if (!profile) {
             errors.noprofile = "There is no profile for this user"
-            response.status(404).send(errors)
+            return response.status(404).send(errors)
         }
 
         response.status(200).json(profile);
@@ -46,6 +47,21 @@ router.get('/', passport.authenticate('jwt', {
     })
 });
 
+//@route   POST api/profile/all
+//@desc    Get All Profile
+//@acess   Public
+
+router.get('/all', (request,response) => {
+    const errors = {};
+    Profile.find().populate('user',['name','avatar'])
+    .then(profiles => {
+        if (!profiles){
+            errors.noprofile = "There are no profiles"
+            return response.status(404).json(errors);
+        }
+        response.json(profiles);
+    }).catch(err => response.json({profile:'No profiles Found'}));
+});
 
 
 
@@ -57,11 +73,11 @@ router.get('/', passport.authenticate('jwt', {
 router.get('/handle/:handle', (request,response) => {
 
     const errors = {};
-    Profile.findOne({handle:request.params.handle}).populate('user',[name,avatar])
+    Profile.findOne({handle:request.params.handle}).populate('user',['name','avatar'])
     .then(profile => {
         if (!profile){
-            errors.profile = "There is no profile for this user";
-            response.status(400).json(errors);
+            errors.noprofile = "There is no profile for this user";
+            return response.status(400).json(errors);
         }
         response.json(profile);
     }).catch(err => response.status(404).json(err));
@@ -75,14 +91,14 @@ router.get('/handle/:handle', (request,response) => {
 router.get('/user/:user_id', (request,response) => {
 
     const errors = {};
-    Profile.findOne({handle:request.params.user_id}).populate('user',[name,avatar])
+    Profile.findOne({user:request.params.user_id}).populate('user',['name','avatar'])
     .then(profile => {
         if (!profile){
-            errors.profile = "There is no profile for this user";
-            response.status(400).json(errors);
+            errors.noprofile = "There is no profile for this user";
+            return response.status(400).json(errors);
         }
         response.json(profile);
-    }).catch(err => response.status(404).json(err));
+    }).catch(err => response.status(404).json({profile:'There is no profile for this user'}));
 });
 
 
@@ -155,6 +171,45 @@ router.post('/', passport.authenticate('jwt', {
             })
         }
     })
+});
+
+
+//@route   POSt api/profile/experience
+//@desc    Add an Experience
+//@acess   Private
+
+router.post('/experience',passport.authenticate('jwt',{session:false}), (request,response) =>{
+
+    const {errors,isValid} = validateExperienceInput(request.body);
+
+    if (!isValid){
+        
+        //Return any errors with status 400
+        return response.status(400).json({error:"Unrecoverable",errors});
+    }
+    Profile.findOne({user:request.user.id})
+    .then( profile => {
+        if (!profile){
+            response.json({Error:"No Profile"})
+        }
+        const newExp = {
+            title: request.body.title,
+            company:request.body.company,
+            location:request.body.location,
+            from: request.body.from,
+            to: request.body.to,
+            current: request.body.current,
+            description:request.body.description
+        }
+
+        //Add to experiemce Array
+        profile.experience.push(newExp);
+
+        profile.save()
+        .then(newprofile => {
+            response.json(newprofile);
+        }).catch(err => response.json(err))
+    }).catch(err => response.json({Error:"Error occurred" + err}));
 });
 
 
