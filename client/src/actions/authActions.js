@@ -3,9 +3,11 @@ import axios from "axios";
 import setAuthToken from "../Utils/SetAuthToken";
 import jwt_decode from "jwt-decode";
 
+axios.defaults.baseURL = "http://localhost:1920/api";
+
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post("api/users/register", userData)
+    .post("/users/register", userData)
     .then(x => history.push("/login"))
     .catch(err =>
       dispatch({
@@ -19,7 +21,7 @@ export const registerUser = (userData, history) => dispatch => {
 
 export const loginUser = userData => dispatch => {
   axios
-    .post("api/user/login", userData)
+    .post("/users/login", userData)
     .then(result => {
       //SSave to local storage
       const { token } = result.data;
