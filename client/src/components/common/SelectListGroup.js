@@ -11,18 +11,18 @@ const SelectListGroup = ({
   onChange,
   options
 }) => {
-  const selectOptions = options.map(option => {
+  const selectOptions = options.map(option => (
     <option key={option.label} value={option.value}>
       {option.label}
-    </option>;
-  });
+    </option>
+  ));
   return (
     <div className="form-group">
       <select
         className={classnames(
           "form-control form-control-lgform-control form-control-lg",
           {
-            "is-invalid": { error }
+            "is-invalid": error
           }
         )}
         name={name}

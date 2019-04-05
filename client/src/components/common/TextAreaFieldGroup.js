@@ -16,7 +16,7 @@ const TetxAreaFieldGroup = ({
         className={classnames(
           "form-control form-control-lgform-control form-control-lg",
           {
-            "is-invalid": { error }
+            "is-invalid": error
           }
         )}
         placeholder={placeholder}
