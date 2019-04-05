@@ -43,16 +43,64 @@ class CreateProfile extends Component {
     //Select options for status
     const options = [
       { label: "* Select Professional status", value: 0 },
-      { label: "* Developer", value: "Developer" },
-      { label: "* Senior Developer", value: "Senior Developer" },
-      { label: "* Manager", value: "Manager" },
-      { label: "* DevOps Engineer", value: "DevOps Engineer" },
-      { label: "* Intern", value: "Intern" },
-      { label: "* Student", value: "Student" },
-      { label: "* Instructor", value: "Instructor" },
-      { label: "* Other", value: "Other" }
+      { label: "Developer", value: "Developer" },
+      { label: "Senior Developer", value: "Senior Developer" },
+      { label: "Manager", value: "Manager" },
+      { label: "DevOps Engineer", value: "DevOps Engineer" },
+      { label: "Intern", value: "Intern" },
+      { label: "Student", value: "Student" },
+      { label: "Instructor", value: "Instructor" },
+      { label: "Other", value: "Other" }
     ];
-    const { errors } = this.state;
+    const { errors, displaySocialInput } = this.state;
+    let socialInputs;
+    if (displaySocialInput) {
+      socialInputs = (
+        <div>
+          <InputGroup
+            placeholder="Twitter Profile Url"
+            name="twitter"
+            icon="fab fa-twitter"
+            value={this.state.twitter}
+            onChange={this.onChange}
+            error={errors.twitter}
+          />
+          <InputGroup
+            placeholder="Facebook Profile Url"
+            name="facebook"
+            icon="fab fa-facebook"
+            value={this.state.facebook}
+            onChange={this.onChange}
+            error={errors.facebook}
+          />
+          <InputGroup
+            placeholder="Instagram Profile Url"
+            name="instagram"
+            icon="fab fa-instagram"
+            value={this.state.instagram}
+            onChange={this.onChange}
+            error={errors.instagram}
+          />
+          <InputGroup
+            placeholder="LinkedIn Profile Url"
+            name="linkedin"
+            icon="fab fa-linkedin"
+            value={this.state.linkedin}
+            onChange={this.onChange}
+            error={errors.linkedin}
+          />
+
+          <InputGroup
+            placeholder="Youtube Channel Url"
+            name="youtube"
+            icon="fab fa-youtube"
+            value={this.state.youtube}
+            onChange={this.onChange}
+            error={errors.youtube}
+          />
+        </div>
+      );
+    }
     return (
       <div className="create-profile">
         <div className="container">
@@ -81,6 +129,79 @@ class CreateProfile extends Component {
                   error={errors.status}
                   options={options}
                   info="Your current Career stage"
+                />
+
+                <TextFieldGroup
+                  placeholder="* Company"
+                  name="company"
+                  value={this.state.company}
+                  onChange={this.onChange}
+                  error={errors.company}
+                  info="Any Company you are affiliated with"
+                />
+                <TextFieldGroup
+                  placeholder="* Website"
+                  name="website"
+                  value={this.state.website}
+                  onChange={this.onChange}
+                  error={errors.website}
+                  info="Personal Website or Company Website"
+                />
+
+                <TextFieldGroup
+                  placeholder="* Location"
+                  name="location"
+                  value={this.state.location}
+                  onChange={this.onChange}
+                  error={errors.location}
+                  info="Current Location"
+                />
+
+                <TextFieldGroup
+                  placeholder="* Skills"
+                  name="skills"
+                  value={this.state.skills}
+                  onChange={this.onChange}
+                  error={errors.skills}
+                  info="Please seperate skills with commas"
+                />
+
+                <TextFieldGroup
+                  placeholder="Github Username"
+                  name="githubusername"
+                  value={this.state.githubusername}
+                  onChange={this.onChange}
+                  error={errors.githubusername}
+                  info="Show current Repos"
+                />
+
+                <TextAreaFieldGroup
+                  placeholder="Short Bio"
+                  name="bio"
+                  value={this.state.bio}
+                  onChange={this.onChange}
+                  error={errors.bio}
+                  info="A short description of yourself"
+                />
+
+                <div className="mb-3">
+                  <button
+                    className="btn btn-light"
+                    onClick={() => {
+                      this.setState(previous => ({
+                        displaySocialInput: !previous.displaySocialInput
+                      }));
+                    }}
+                  >
+                    Add Social Newwork Links
+                  </button>
+                  <span className="text-muted"> Optional</span>
+                </div>
+                {socialInputs}
+                <input
+                  type="submit"
+                  value="Submit"
+                  className="btn btn-info btn-block mt-4"
                 />
               </form>
             </div>
