@@ -106,6 +106,23 @@ export const deleteExperience = id => dispatch => {
     );
 };
 
+export const deleteEducation = id => dispatch => {
+  axios
+    .delete(`profile/education/${id}`)
+    .then(x =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: x.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
 //Delete Account and Profie
 
 export const deleteAccount = () => dispatch => {

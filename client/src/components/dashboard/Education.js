@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import Moment from "react-moment";
-import { deleteExperience } from "../../actions/profileActions";
+import { deleteEducation } from "../../actions/profileActions";
 
 class Education extends Component {
   deleteEdu(id) {
@@ -20,7 +20,7 @@ class Education extends Component {
         </td>
         <td>
           <button
-            onClick={this.deleteExp.bind(this, edu._id)}
+            onClick={this.deleteEdu.bind(this, edu._id)}
             className="btn btn-danger"
           >
             Delete
