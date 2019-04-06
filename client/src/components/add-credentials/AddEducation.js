@@ -68,7 +68,6 @@ class AddEducation extends Component {
 
   render() {
     const { errors } = this.state;
-    console.log(errors);
 
     return (
       <div className="add-experience">
@@ -101,7 +100,7 @@ class AddEducation extends Component {
                 />
 
                 <TextFieldGroup
-                  placeholder="Field of Study"
+                  placeholder=" * Field of Study"
                   name="fieldofstudy"
                   value={this.state.fieldofstudy}
                   onChange={this.onChange}
@@ -141,12 +140,12 @@ class AddEducation extends Component {
                 </div>
 
                 <TextAreaFieldGroup
-                  placeholder="Job Description"
+                  placeholder="Study Description"
                   name="description"
                   value={this.state.description}
                   onChange={this.onChange}
                   error={errors.description}
-                  info="Tell us more about the Job"
+                  info="Tell us more about the what you studied"
                 />
 
                 <input

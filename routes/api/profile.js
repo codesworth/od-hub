@@ -253,7 +253,7 @@ router.post(
 
     if (!isValid) {
       //Return any errors with status 400
-      return response.status(400).json({ error: "Unrecoverable", errors });
+      return response.status(400).json(errors);
     }
     Profile.findOne({ user: request.user.id })
       .then(profile => {
