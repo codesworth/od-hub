@@ -28,6 +28,25 @@ export const getCurrentProfile = () => dispatch => {
     });
 };
 
+//getProfileByHandle
+export const getProfileByHandle = handle => dispatch => {
+  dispatch(setProfilelaoding());
+  axios
+    .get(`profile/handle/${handle}`)
+    .then(response =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: response.data
+      })
+    )
+    .catch(error => {
+      dispatch({
+        type: GET_PROFILE,
+        payload: null
+      });
+    });
+};
+
 //Prodiel loading
 
 export const setProfilelaoding = () => {
