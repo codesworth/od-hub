@@ -21,7 +21,6 @@ const TetxAreaFieldGroup = ({
         )}
         placeholder={placeholder}
         name={name}
-        required
         value={value}
         onChange={onChange}
       />

@@ -34,6 +34,21 @@ export const setProfilelaoding = () => {
   };
 };
 
+//Create Profile
+
+export const createProfile = (profileData, history) => dispatch => {
+  axios
+    .post("/profile/", profileData)
+    .then(x => history.push("/dashboard"))
+    .catch(err => {
+      console.log("This is the rror: " + err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
 //Clear Profile
 
 export const clearCurrentProfile = () => {

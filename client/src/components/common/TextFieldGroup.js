@@ -25,7 +25,6 @@ const TextFeildGroup = ({
         )}
         placeholder={placeholder}
         name={name}
-        required
         value={value}
         onChange={onChange}
         disabled={disabled}

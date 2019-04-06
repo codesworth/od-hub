@@ -13,7 +13,7 @@ const InputGroup = ({
 }) => {
   return (
     <div className="input-group mb-3">
-      <div className="input-goup-prepend">
+      <div className="input-group-prepend">
         <span className="input-group-text">
           <i className={icon} />
         </span>
