@@ -4,7 +4,8 @@ import {
   GET_PROFILE,
   PROFILE_LOADING,
   CLEAR_CURRENT,
-  SET_CURRENT_USER
+  SET_CURRENT_USER,
+  GET_PROFILES
 } from "./types";
 
 //GET CUrrent profilr
@@ -33,6 +34,25 @@ export const setProfilelaoding = () => {
   return {
     type: PROFILE_LOADING
   };
+};
+
+export const getProfiles = () => dispatch => {
+  dispatch(setProfilelaoding());
+
+  axios
+    .get("/profile/all")
+    .then(x =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: x.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: null
+      })
+    );
 };
 
 //Create Profile
