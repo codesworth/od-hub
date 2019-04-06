@@ -87,6 +87,25 @@ export const addEducation = (eduData, history) => dispatch => {
     });
 };
 
+//Delete Experience
+
+export const deleteExperience = id => dispatch => {
+  axios
+    .delete(`profile/experience/${id}`)
+    .then(x =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: x.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
 //Delete Account and Profie
 
 export const deleteAccount = () => dispatch => {
