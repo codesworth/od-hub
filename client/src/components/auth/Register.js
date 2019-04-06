@@ -50,7 +50,7 @@ class Register extends Component {
   };
 
   render() {
-    const { name, email, password, password2, errors } = this.state;
+    const { errors } = this.state;
 
     return (
       <div className="register">
