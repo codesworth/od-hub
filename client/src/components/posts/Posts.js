@@ -4,6 +4,7 @@ import PostFrom from "./PostForm";
 import PropTypes from "prop-types";
 import { getPosts } from "../../actions/postActions";
 import Spinner from "../common/Spinner";
+import PostFeed from "./PostFeed";
 
 class Posts extends Component {
   componentDidMount() {
@@ -11,7 +12,7 @@ class Posts extends Component {
   }
 
   render() {
-    const { posts, loading } = this.props.posts;
+    const { posts, loading } = this.props.post;
     let postContent;
 
     if (posts === null || loading) {
