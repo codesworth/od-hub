@@ -5,7 +5,8 @@ import {
   GET_ERRORS,
   GET_POSTS,
   POST_LOADING,
-  DELETE_POST
+  DELETE_POST,
+  GET_POST
 } from "./types";
 
 //Add Post
@@ -40,6 +41,24 @@ export const getPosts = () => dispatch => {
     .catch(err =>
       dispatch({
         type: GET_POSTS,
+        payload: null
+      })
+    );
+};
+
+export const getPost = id => dispatch => {
+  dispatch(setPostLoading());
+  axios
+    .get(`/posts/${id}`)
+    .then(x =>
+      dispatch({
+        type: GET_POST,
+        payload: x.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_POST,
         payload: null
       })
     );
