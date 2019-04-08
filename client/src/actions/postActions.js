@@ -15,7 +15,7 @@ import {
 export const addComment = (postID, newComment) => dispatch => {
   dispatch(clearErrors());
   axios
-    .post(`/posts/comment/${postID}`, newComment)
+    .post(`api/posts/comment/${postID}`, newComment)
     .then(x =>
       dispatch({
         type: GET_POST,
@@ -32,7 +32,7 @@ export const addComment = (postID, newComment) => dispatch => {
 
 export const addPost = postData => dispatch => {
   axios
-    .post("/posts", postData)
+    .post("api/posts", postData)
     .then(x =>
       dispatch({
         type: ADD_POST,
@@ -50,7 +50,7 @@ export const addPost = postData => dispatch => {
 export const getPosts = () => dispatch => {
   dispatch(setPostLoading());
   axios
-    .get("/posts")
+    .get("api/posts")
     .then(x =>
       dispatch({
         type: GET_POSTS,
@@ -68,7 +68,7 @@ export const getPosts = () => dispatch => {
 export const getPost = id => dispatch => {
   dispatch(setPostLoading());
   axios
-    .get(`/posts/${id}`)
+    .get(`api/posts/${id}`)
     .then(x =>
       dispatch({
         type: GET_POST,
@@ -95,7 +95,7 @@ export const setPostLoading = () => {
 
 export const deletePost = id => dispatch => {
   axios
-    .delete(`/posts/${id}`)
+    .delete(`api/posts/${id}`)
     .then(x =>
       dispatch({
         type: DELETE_POST,
@@ -112,7 +112,7 @@ export const deletePost = id => dispatch => {
 
 export const addLike = id => dispatch => {
   axios
-    .post(`/posts/like/${id}`)
+    .post(`api/posts/like/${id}`)
     .then(x => dispatch(getPosts()))
     .catch(err =>
       dispatch({
@@ -124,7 +124,7 @@ export const addLike = id => dispatch => {
 
 export const removeLike = id => dispatch => {
   axios
-    .post(`/posts/unlike/${id}`)
+    .post(`api/posts/unlike/${id}`)
     .then(x => dispatch(getPosts()))
     .catch(err =>
       dispatch({
@@ -136,7 +136,7 @@ export const removeLike = id => dispatch => {
 
 export const deleteComment = (postID, commentID) => dispatch => {
   axios
-    .delete(`/posts/comment/${postID}/${commentID}`)
+    .delete(`api/posts/comment/${postID}/${commentID}`)
     .then(x =>
       dispatch({
         type: GET_POST,
