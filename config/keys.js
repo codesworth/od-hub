@@ -1,6 +1,5 @@
-
-
-module.exports = {
-    mongoURI : 'mongodb://codesworth:12shady12@ds131109.mlab.com:31109/od_hub',
-    secretOrKey: 'LordLaytonofTheHightower'
-};
+if (process.env.NODE_ENV === "production") {
+  module.exports = require("./keys_prod");
+} else {
+  module.exports = require("./keys_dev");
+}
